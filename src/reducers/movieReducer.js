@@ -1,7 +1,8 @@
-import { SEARCH_MOVIES_BY_TITLE } from "../actions/types";
+import { SEARCH_MOVIES_BY_TITLE, LOADING } from "../actions/types";
 
 const initialState = {
-  result: []
+  result: [],
+  loading: false
 };
 
 export default function(state = initialState, action) {
@@ -12,7 +13,13 @@ export default function(state = initialState, action) {
     case SEARCH_MOVIES_BY_TITLE:
       return {
         ...state,
-        result: action.payload
+        result: action.payload,
+        loading: false
+      };
+    case LOADING:
+      return {
+        ...state,
+        loading: true
       };
   }
 }

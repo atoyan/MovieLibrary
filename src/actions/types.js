@@ -1,1 +1,2 @@
 export const SEARCH_MOVIES_BY_TITLE = "SEARCH_MOVIES_BY_TITLE";
+export const LOADING = "LOADING";

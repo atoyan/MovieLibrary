@@ -1,10 +1,17 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { connect } from "react-redux";
 import { searchMoviesByTitle } from "../actions/searchMoviesByTitleAction";
 import { API_KEY } from "../keys/key";
+import Spinner from "./Spinner";
+
+const _ = require("lodash");
 
 class MovieList extends Component {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.result) {
+      this.setState({ result: nextProps.result.result });
+    }
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -17,30 +24,25 @@ class MovieList extends Component {
       this.setState({ search: e.target.value });
     };
     this.onClick = () => {
-      axios
-        .get(
-          "https://api.themoviedb.org/3/search/movie?api_key=" +
-            API_KEY +
-            "&query=" +
-            this.state.search
-        )
-        .then(res => {
-          this.setState({ result: res.data.results });
-        })
-        .catch(err => {
-          this.setState({ error: err });
-        });
+      this.props.searchMoviesByTitle(this.state.search, API_KEY);
+    };
+    this.onKeyPress = e => {
+      if (e.key === "Enter") {
+        this.onClick();
+      }
     };
   }
 
   render() {
     let results = "";
     let baseUrl = "http://image.tmdb.org/t/p/w185";
-    if (this.state.result && !this.state.error) {
+    if (!_.isEmpty(this.state.result) && _.isEmpty(this.state.error)) {
+      console.log(this.state.result);
       results = this.state.result.map(res => (
-        <div className="container" key={res.id}>
-          <hr />
-          <div>{res.original_title}</div>
+        <div key={res.id}>
+          <div>
+            <h2> {res.original_title}</h2>
+          </div>
           <div className="container">
             {" "}
             <p>{res.overview} </p>
@@ -51,23 +53,45 @@ class MovieList extends Component {
           </div>
         </div>
       ));
-    } else if (this.state.error) {
-      results = <div>An error occured</div>;
+    } else if (this.props.loading) {
+      results = <Spinner />;
+    } else if (!_.isEmpty(this.state.error)) {
+      results = (
+        <div>
+          <h3>An error occured please try a different title</h3>
+        </div>
+      );
     }
 
     return (
       <div>
-        <label>Search </label>
-        <input type="text" name="SearchInput" onChange={this.onChange} />
-        <input type="submit" onClick={this.onClick} value="search" />
+        <label className="mr-2 ">
+          <h2>Search Movie </h2>
+        </label>
 
+        <input
+          type="text"
+          className="form-control mb-2"
+          style={{ width: "30%", margin: "0 auto" }}
+          name="SearchInput"
+          onChange={this.onChange}
+          onKeyPress={this.onKeyPress}
+        />
+        <input
+          type="submit"
+          className="btn btn-info ml-2"
+          onClick={this.onClick}
+          value="search"
+        />
+        <hr />
         {results}
       </div>
     );
   }
 }
 const mapStateToProps = state => ({
-  result: state.result
+  result: state.result,
+  loading: state.result.loading
 });
 
 export default connect(
