@@ -1,0 +1,7 @@
+.nav-item a {
+  color: white;
+  text-align: center;
+}
+.navbar.center .navbar-inner {
+  text-align: center;
+}
