@@ -42,6 +42,9 @@ class MovieList extends Component {
         <div key={res.id}>
           <div>
             <h2> {res.original_title}</h2>
+            <h4>
+              <span>IMDB Rating {res.vote_average} </span>
+            </h4>
           </div>
           <div className="container">
             {" "}
@@ -81,7 +84,7 @@ class MovieList extends Component {
           type="submit"
           className="btn btn-info ml-2"
           onClick={this.onClick}
-          value="search"
+          value="SEARCH"
         />
         <hr />
         {results}
