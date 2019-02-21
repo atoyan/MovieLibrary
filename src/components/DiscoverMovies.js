@@ -1,18 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { searchMoviesByTitle } from "../actions/searchMoviesByTitleAction";
+import { popularMovies } from "../actions/searchMoviesByTitleAction";
 import { API_KEY } from "../keys/key";
 import Spinner from "./Spinner";
-
 const _ = require("lodash");
 
-class MovieList extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.result) {
-      this.setState({ result: nextProps.result.result });
-    }
-  }
+class DiscoverMovies extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,18 +14,14 @@ class MovieList extends Component {
       result: [],
       error: ""
     };
-    this.onChange = e => {
-      e.preventDefault();
-      this.setState({ search: e.target.value });
-    };
-    this.onClick = () => {
-      this.props.searchMoviesByTitle(this.state.search, API_KEY);
-    };
-    this.onKeyPress = e => {
-      if (e.key === "Enter") {
-        this.onClick();
-      }
-    };
+  }
+  componentDidMount() {
+    this.props.popularMovies(API_KEY);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (!_.isEmpty(nextProps)) {
+      this.setState({ result: nextProps.result.result });
+    }
   }
 
   render() {
@@ -40,7 +30,11 @@ class MovieList extends Component {
     if (!_.isEmpty(this.state.result) && _.isEmpty(this.state.error)) {
       console.log(this.state.result);
       results = this.state.result.map(res => (
-        <div key={res.id} className="col-md-3 col-sm-6 mb-4">
+        <div
+          key={res.id}
+          name={res.original_title}
+          className="col-md-3 col-sm-6"
+        >
           <h5 style={{ textAlign: "center" }}> {res.original_title}</h5>
           <Link to={`movie/${res.id}`}>
             <img src={baseUrl + res.poster_path} alt="" name={res.id} />
@@ -48,12 +42,7 @@ class MovieList extends Component {
         </div>
       ));
     } else if (this.props.loading) {
-      results = (
-        <div className="m-auto">
-          {" "}
-          <Spinner />{" "}
-        </div>
-      );
+      results = <Spinner />;
     } else if (!_.isEmpty(this.state.error)) {
       results = (
         <div>
@@ -64,24 +53,6 @@ class MovieList extends Component {
 
     return (
       <div className="container">
-        <div />
-        <input
-          type="text"
-          className="form-control mb-2"
-          style={{ width: "30%", margin: "0 auto" }}
-          name="SearchInput"
-          onChange={this.onChange}
-          onKeyPress={this.onKeyPress}
-          placeholder="Find movies"
-        />
-        <input
-          type="submit"
-          className="btn btn-info ml-2"
-          onClick={this.onClick}
-          value="SEARCH"
-        />
-        <hr />
-
         <div className="row">{results}</div>
       </div>
     );
@@ -94,5 +65,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { searchMoviesByTitle }
-)(MovieList);
+  { popularMovies }
+)(DiscoverMovies);
