@@ -25,7 +25,9 @@ class MovieList extends Component {
       this.setState({ search: e.target.value });
     };
     this.onClick = () => {
-      this.props.searchMoviesByTitle(this.state.search, API_KEY);
+      if (!_.isEmpty(this.state.search)) {
+        this.props.searchMoviesByTitle(this.state.search, API_KEY);
+      }
     };
     this.onKeyPress = e => {
       if (e.key === "Enter") {
@@ -73,6 +75,7 @@ class MovieList extends Component {
           onChange={this.onChange}
           onKeyPress={this.onKeyPress}
           placeholder="Find movies"
+          required
         />
         <input
           type="submit"

@@ -9,7 +9,7 @@ export default function Header() {
           <li className="nav-item">
             <a
               className="nav-link ml-auto "
-              href="."
+              href="/"
               style={{ color: "white" }}
             >
               <i className="fas fa-film" /> MOVIE LIBRARY{" "}
