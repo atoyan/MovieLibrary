@@ -4,10 +4,14 @@ import { Link } from "react-router-dom";
 import { searchMoviesByTitle } from "../actions/searchMoviesByTitleAction";
 import { API_KEY } from "../keys/key";
 import Spinner from "./Spinner";
+import noposter from "./noposter.jpg";
 
 const _ = require("lodash");
 
 class MovieList extends Component {
+  componentDidMount() {
+    this.setState({ result: this.props.result.result });
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.result) {
       this.setState({ result: nextProps.result.result });
@@ -18,6 +22,7 @@ class MovieList extends Component {
     this.state = {
       search: "",
       result: [],
+      noposter: { noposter },
       error: ""
     };
     this.onChange = e => {
@@ -26,7 +31,10 @@ class MovieList extends Component {
     };
     this.onClick = () => {
       if (!_.isEmpty(this.state.search)) {
+        this.setState({ error: "" });
         this.props.searchMoviesByTitle(this.state.search, API_KEY);
+      } else {
+        this.setState({ error: "Please enter a movie Title!" });
       }
     };
     this.onKeyPress = e => {
@@ -43,9 +51,18 @@ class MovieList extends Component {
       console.log(this.state.result);
       results = this.state.result.map(res => (
         <div key={res.id} className="col-md-3 col-sm-6 mb-4">
-          <h5 style={{ textAlign: "center" }}> {res.original_title}</h5>
           <Link to={`movie/${res.id}`}>
-            <img src={baseUrl + res.poster_path} alt="" name={res.id} />
+            <h5 style={{ textAlign: "center" }}> {res.original_title}</h5>
+
+            <img
+              src={
+                _.isEmpty(baseUrl + res.poster_path)
+                  ? noposter
+                  : baseUrl + res.poster_path
+              }
+              alt=""
+              name={res.id}
+            />
           </Link>
         </div>
       ));
@@ -56,17 +73,11 @@ class MovieList extends Component {
           <Spinner />{" "}
         </div>
       );
-    } else if (!_.isEmpty(this.state.error)) {
-      results = (
-        <div>
-          <h3>An error occured please try a different title</h3>
-        </div>
-      );
     }
 
     return (
       <div className="container">
-        <div />
+        <label style={{ color: "#e12901" }}>{this.state.error}</label>
         <input
           type="text"
           className="form-control mb-2"

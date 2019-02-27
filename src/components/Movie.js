@@ -31,6 +31,11 @@ class Movie extends Component {
           <h2>{this.state.movie.original_title}</h2>
           <img src={`${baseUrl}${this.state.movie.poster_path}`} alt="poster" />
           <h5>Overview</h5>
+          <p>
+            {" "}
+            <span> Votes: {this.state.movie.vote_count} </span>{" "}
+            <span> Rating: {this.state.movie.vote_average} </span>
+          </p>
           <p>{this.state.movie.overview}</p>
         </div>
       );
