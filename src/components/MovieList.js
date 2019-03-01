@@ -15,6 +15,7 @@ class MovieList extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.result) {
       this.setState({ result: nextProps.result.result });
+      console.log(this.state.result);
     }
   }
   constructor(props) {
