@@ -35,7 +35,10 @@ class DiscoverMovies extends Component {
           name={res.original_title}
           className="col-md-3 col-sm-6"
         >
-          <h5 style={{ textAlign: "center" }}> {res.original_title}</h5>
+          <h5 style={{ textAlign: "center" }}>
+            {" "}
+            {res.original_title} ({res.release_date})
+          </h5>
           <Link to={`movie/${res.id}`}>
             <img src={baseUrl + res.poster_path} alt="" name={res.id} />
           </Link>

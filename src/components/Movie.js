@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
+import noposter from "./noposter.jpg";
 import { searchMovie } from "../actions/searchMoviesByTitleAction";
 import { API_KEY } from "../keys/key";
+import PropTypes from "prop-types";
 
 class Movie extends Component {
   constructor(props) {
@@ -25,11 +26,18 @@ class Movie extends Component {
   render() {
     let movie;
     let baseUrl = "http://image.tmdb.org/t/p/w500";
+    let posterpath = this.state.movie.poster_path
+      ? baseUrl + this.state.movie.poster_path
+      : noposter;
+    console.log(this.state.movie.poster_path);
+    console.log(posterpath);
     if (this.state.movie) {
       movie = (
         <div className="col-md-6 m-auto">
-          <h2>{this.state.movie.original_title}</h2>
-          <img src={`${baseUrl}${this.state.movie.poster_path}`} alt="poster" />
+          <h2>
+            {this.state.movie.original_title} ({this.state.movie.release_date}){" "}
+          </h2>
+          <img className="img-fluid" src={posterpath} alt="poster" />
           <h5>Overview</h5>
           <p>
             {" "}
@@ -49,6 +57,11 @@ class Movie extends Component {
     );
   }
 }
+
+Movie.propTypes = {
+  movie: PropTypes.object.isRequired,
+  searchMovie: PropTypes.func.isRequired
+};
 
 const mapStateToProps = state => ({
   movie: state.result.movie

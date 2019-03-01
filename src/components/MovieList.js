@@ -5,6 +5,7 @@ import { searchMoviesByTitle } from "../actions/searchMoviesByTitleAction";
 import { API_KEY } from "../keys/key";
 import Spinner from "./Spinner";
 import noposter from "./noposter.jpg";
+import Proptypes from "prop-types";
 
 const _ = require("lodash");
 
@@ -15,7 +16,6 @@ class MovieList extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.result) {
       this.setState({ result: nextProps.result.result });
-      console.log(this.state.result);
     }
   }
   constructor(props) {
@@ -48,16 +48,21 @@ class MovieList extends Component {
   render() {
     let results = "";
     let baseUrl = "http://image.tmdb.org/t/p/w185";
+    console.log(this.state.result);
     if (!_.isEmpty(this.state.result) && _.isEmpty(this.state.error)) {
       console.log(this.state.result);
       results = this.state.result.map(res => (
         <div key={res.id} className="col-md-3 col-sm-6 mb-4">
           <Link to={`movie/${res.id}`}>
-            <h5 style={{ textAlign: "center" }}> {res.original_title}</h5>
+            <h6 style={{ textAlign: "center" }}>
+              {" "}
+              {res.original_title} ({res.release_date})
+            </h6>
 
             <img
+              className="img-fluid"
               src={
-                _.isEmpty(baseUrl + res.poster_path)
+                _.isEmpty(res.poster_path)
                   ? noposter
                   : baseUrl + res.poster_path
               }
@@ -106,6 +111,10 @@ const mapStateToProps = state => ({
   result: state.result,
   loading: state.result.loading
 });
+MovieList.propTypes = {
+  searchMoviesByTitle: Proptypes.func.isRequired,
+  result: Proptypes.object.isRequired
+};
 
 export default connect(
   mapStateToProps,
