@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { searchMoviesByTitle } from "../actions/searchMoviesByTitleAction";
-//import { API_KEY } from "../keys/key";
+import { API_KEY } from "../keys/key";
 import Spinner from "./Spinner";
 import noposter from "./noposter.jpg";
 import Proptypes from "prop-types";
 
-const key = process.env.API_KEY; // || API_KEY;
+const key = process.env.API_KEY || API_KEY;
 
 const _ = require("lodash");
 
