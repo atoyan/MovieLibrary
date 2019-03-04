@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import noposter from "./noposter.jpg";
 import { searchMovie } from "../actions/searchMoviesByTitleAction";
-import { API_KEY } from "../keys/key";
+//import { API_KEY } from "../keys/key";
 import PropTypes from "prop-types";
-const key = process.env.API_KEY || API_KEY;
+const key = process.env.API_KEY; // || API_KEY;
 
 class Movie extends Component {
   constructor(props) {
