@@ -5,6 +5,7 @@ import { popularMovies } from "../actions/searchMoviesByTitleAction";
 import { API_KEY } from "../keys/key";
 import Spinner from "./Spinner";
 const _ = require("lodash");
+const key = process.env.API_KEY || API_KEY;
 
 class DiscoverMovies extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class DiscoverMovies extends Component {
     };
   }
   componentDidMount() {
-    this.props.popularMovies(API_KEY);
+    this.props.popularMovies(key);
   }
   componentWillReceiveProps(nextProps) {
     if (!_.isEmpty(nextProps)) {

@@ -4,6 +4,7 @@ import noposter from "./noposter.jpg";
 import { searchMovie } from "../actions/searchMoviesByTitleAction";
 import { API_KEY } from "../keys/key";
 import PropTypes from "prop-types";
+const key = process.env.API_KEY || API_KEY;
 
 class Movie extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class Movie extends Component {
   }
   componentDidMount() {
     if (this.props.match.params.id) {
-      this.props.searchMovie(this.props.match.params.id, API_KEY);
+      this.props.searchMovie(this.props.match.params.id, key);
     }
   }
   componentWillReceiveProps(nextProps) {

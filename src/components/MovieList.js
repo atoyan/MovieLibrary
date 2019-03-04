@@ -7,6 +7,8 @@ import Spinner from "./Spinner";
 import noposter from "./noposter.jpg";
 import Proptypes from "prop-types";
 
+const key = process.env.API_KEY || API_KEY;
+
 const _ = require("lodash");
 
 class MovieList extends Component {
@@ -33,7 +35,7 @@ class MovieList extends Component {
     this.onClick = () => {
       if (!_.isEmpty(this.state.search)) {
         this.setState({ error: "" });
-        this.props.searchMoviesByTitle(this.state.search, API_KEY);
+        this.props.searchMoviesByTitle(this.state.search, key);
       } else {
         this.setState({ error: "Please enter a movie Title!" });
       }
